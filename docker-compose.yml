@@ -1,18 +1,20 @@
 version: '3.7'
 services:
     # imagem micro 01
-    micro_01:
+    app:
         build:
             args:
-                user: bruno
-                uid: 1000
+                user: ${DOCKER_USER}
+                uid: ${DOCKER_UID}
             context: ./
             dockerfile: Dockerfile
         restart: unless-stopped
         volumes:
             - ./:/var/www
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         networks:
-            - microservices
+            - microservices_01
 
     # imagem nginx
     nginx:
@@ -20,15 +22,15 @@ services:
         restart: unless-stopped
         ports:
             - 8000:80
-            - 443:443
+            #- 443:443
         volumes:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks:
-            - microservices
+            - microservices_01
 
     # imagem banco de dados
-    micro_01_db:
+    db:
         image: mysql:5.7.22
         restart: unless-stopped
         ports:
@@ -41,24 +43,24 @@ services:
         volumes:
             - ./.docker/mysql/data:/var/lib/mysql
         networks:
-            - microservices
+            - microservices_01
 
     # imagem phpmyadmin
-    micro_01_phpmyadmin:
+    phpmyadmin:
         image: phpmyadmin/phpmyadmin
         restart: unless-stopped
         ports:
-            - 8001:80
+            - 8085:80
         environment:
             PMA_ARBITRARY: 1
-            PMA_HOST: micro_01_db
+            PMA_HOST: db
             PMA_USER: ${DB_USERNAME}
             PMA_PASSWORD: ${DB_PASSWORD}
         links:
-            - micro_01_db
+            - db
         networks:
-            - microservices
+            - microservices_01
 
 networks:
-    microservices:
+    microservices_01:
         driver: bridge
