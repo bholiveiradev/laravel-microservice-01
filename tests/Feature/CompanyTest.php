@@ -52,8 +52,6 @@ class CompanyTest extends TestCase
 
         $response = $this->getJson("{$this->endpoint}/{$company->uuid}");
 
-        $response->dump();
-
         $response->assertJsonStructure([
             'data' => [
                 'uuid',
