@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class CompnayTest extends TestCase
+class CompanyTest extends TestCase
 {
     protected $endpoint = '/companies';
 
@@ -51,6 +51,8 @@ class CompnayTest extends TestCase
         $company = Company::factory()->create();
 
         $response = $this->getJson("{$this->endpoint}/{$company->uuid}");
+
+        $response->dump();
 
         $response->assertJsonStructure([
             'data' => [

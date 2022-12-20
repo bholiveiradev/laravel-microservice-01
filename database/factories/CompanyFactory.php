@@ -19,8 +19,8 @@ class CompanyFactory extends Factory
     {
         return [
             'category_id'   => Category::factory()->create(),
-            'name'          => fake()->unique()->name(),
-            'email'         => fake()->unique()->email(),
+            'name'          => fake()->unique()->company(),
+            'email'         => fake()->unique()->companyEmail(),
             'phone'         => fake()->unique()->numberBetween(1000000000, 9999999999),
             'whatsapp'      => fake()->unique()->numberBetween(1000000000, 9999999999),
             'facebook'      => fake()->unique()->sentence(1),
